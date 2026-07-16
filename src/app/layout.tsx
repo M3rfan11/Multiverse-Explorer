@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Space_Grotesk } from "next/font/google";
+import { Header } from "@/components/layout/header";
 import { Providers } from "./providers";
 import "./globals.css";
 
@@ -28,7 +29,10 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable}`}>
       <body>
         <div aria-hidden className="bg-portal-glow fixed inset-0 -z-10" />
-        <Providers>{children}</Providers>
+        <Providers>
+          <Header />
+          {children}
+        </Providers>
       </body>
     </html>
   );
