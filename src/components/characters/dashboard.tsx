@@ -35,6 +35,12 @@ export function Dashboard() {
     previousPage.current = filters.page;
   }, [filters.page, reducedMotion]);
 
+  // Remember the current view so the detail page's back link can
+  // restore the exact filter/page state.
+  useEffect(() => {
+    sessionStorage.setItem("dashboard-search", window.location.search);
+  }, [filters]);
+
   const hasActiveFilters = Boolean(
     filters.name || filters.status || filters.species,
   );
