@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Space_Grotesk } from "next/font/google";
+import { Chakra_Petch, Inter, Space_Mono } from "next/font/google";
 import { Header } from "@/components/layout/header";
 import { Providers } from "./providers";
 import "./globals.css";
@@ -10,9 +10,17 @@ const inter = Inter({
   display: "swap",
 });
 
-const spaceGrotesk = Space_Grotesk({
+const chakraPetch = Chakra_Petch({
+  weight: ["400", "500", "600", "700"],
   subsets: ["latin"],
   variable: "--font-display",
+  display: "swap",
+});
+
+const spaceMono = Space_Mono({
+  weight: ["400", "700"],
+  subsets: ["latin"],
+  variable: "--font-mono",
   display: "swap",
 });
 
@@ -26,7 +34,10 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable}`}>
+    <html
+      lang="en"
+      className={`${inter.variable} ${chakraPetch.variable} ${spaceMono.variable}`}
+    >
       <body>
         <div aria-hidden className="fixed inset-0 -z-10 overflow-hidden">
           <div className="bg-portal-glow absolute inset-0" />

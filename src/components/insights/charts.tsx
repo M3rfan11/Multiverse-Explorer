@@ -8,7 +8,6 @@ import {
   PieChart,
   ResponsiveContainer,
   Tooltip,
-  Treemap,
   XAxis,
   YAxis,
 } from "recharts";
@@ -93,79 +92,46 @@ export function StatusDoughnut({
   );
 }
 
-interface TreemapCellProps {
-  x?: number;
-  y?: number;
-  width?: number;
-  height?: number;
-  index?: number;
-  name?: string;
-  value?: number;
-}
-
-function SpeciesCell({
-  x = 0,
-  y = 0,
-  width = 0,
-  height = 0,
-  index = 0,
-  name,
-  value,
-}: TreemapCellProps) {
-  const showLabel = width > 64 && height > 32;
-  return (
-    <g>
-      <rect
-        x={x}
-        y={y}
-        width={width}
-        height={height}
-        rx={4}
-        fill={TREEMAP_COLORS[index % TREEMAP_COLORS.length]}
-        fillOpacity={0.85}
-        stroke="#0B0F19"
-        strokeWidth={2}
-      />
-      {showLabel ? (
-        <>
-          <text
-            x={x + 8}
-            y={y + 18}
-            fill="#F8FAFC"
-            fontSize={11}
-            fontWeight={600}
-          >
-            {name}
-          </text>
-          <text x={x + 8} y={y + 32} fill="#E2E8F0" fontSize={10}>
-            {value}
-          </text>
-        </>
-      ) : null}
-    </g>
-  );
-}
-
-export function SpeciesTreemap({
+/**
+ * Horizontal bars instead of a treemap: Humans dominate the distribution
+ * so heavily (366 of 826) that a treemap squeezes every other species
+ * into unreadable slivers. Bars keep every label and count legible.
+ */
+export function SpeciesBars({
   data,
 }: {
   data: AnalyticsResponse["topSpecies"];
 }) {
-  const treemapData = data.map((entry) => ({
-    name: entry.species,
-    size: entry.count,
-  }));
+  const max = data[0]?.count ?? 1;
+  const total = data.reduce((sum, entry) => sum + entry.count, 0);
+
   return (
-    <ResponsiveContainer width="100%" height={260}>
-      <Treemap
-        data={treemapData}
-        dataKey="size"
-        isAnimationActive={false}
-        content={<SpeciesCell />}
-      >
-        <Tooltip content={<ChartTooltip />} />
-      </Treemap>
-    </ResponsiveContainer>
+    <ol className="flex flex-col gap-2.5">
+      {data.map((entry, index) => (
+        <li key={entry.species} className="flex items-center gap-3">
+          <span className="w-28 shrink-0 truncate text-sm text-slate-300">
+            {entry.species}
+          </span>
+          <span className="relative h-2 flex-1 overflow-hidden rounded-full bg-space-800">
+            <span
+              aria-hidden
+              className="absolute inset-y-0 left-0 rounded-full"
+              style={{
+                width: `${(entry.count / max) * 100}%`,
+                backgroundColor:
+                  TREEMAP_COLORS[index % TREEMAP_COLORS.length],
+              }}
+            />
+          </span>
+          <span className="w-10 shrink-0 text-right font-mono text-xs text-portal-300">
+            {entry.count}
+          </span>
+          <span className="w-10 shrink-0 text-right text-xs text-slate-500">
+            {Math.round((entry.count / total) * 100)}%
+          </span>
+        </li>
+      ))}
+    </ol>
   );
 }
 

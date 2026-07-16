@@ -7,7 +7,7 @@ import { Card } from "@/components/ui/card";
 import { CountUp } from "@/components/ui/count-up";
 import { fadeUp, staggerContainer } from "@/lib/motion";
 import type { AnalyticsResponse } from "@/types/analytics";
-import { CastSizeTimeline, SpeciesTreemap, StatusDoughnut } from "./charts";
+import { CastSizeTimeline, SpeciesBars, StatusDoughnut } from "./charts";
 
 export function InsightsDashboard({
   analytics,
@@ -109,8 +109,8 @@ export function InsightsDashboard({
             <h2 className="font-display text-lg font-semibold text-white">
               Species
             </h2>
-            <div className="mt-3">
-              <SpeciesTreemap data={analytics.topSpecies} />
+            <div className="mt-4">
+              <SpeciesBars data={analytics.topSpecies} />
             </div>
           </Card>
         </motion.section>
