@@ -90,8 +90,17 @@ function DetailHero({ character }: { character: CharacterWithEpisodes }) {
         initial={reducedMotion ? false : "hidden"}
         animate="visible"
       >
-        <motion.div variants={fadeUp} className="flex flex-wrap items-center gap-3">
-          <h1 className="font-display text-3xl font-bold text-white md:text-4xl">
+        <motion.p
+          variants={fadeUp}
+          className="font-mono text-xs tracking-[0.3em] text-portal-400"
+        >
+          SPECIMEN #{String(character.id).padStart(3, "0")}
+        </motion.p>
+        <motion.div
+          variants={fadeUp}
+          className="mt-2 flex flex-wrap items-center gap-3"
+        >
+          <h1 className="font-display text-3xl font-bold tracking-tight text-white md:text-4xl">
             {character.name}
           </h1>
           <StatusBadge status={character.status} size="md" />

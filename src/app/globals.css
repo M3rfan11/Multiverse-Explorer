@@ -27,4 +27,37 @@
       transparent
     );
   }
+
+  /* Faint blueprint grid, fading out below the fold */
+  .bg-grid {
+    background-image:
+      linear-gradient(rgb(148 163 184 / 0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(148 163 184 / 0.045) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(
+      ellipse 90% 60% at 50% 0%,
+      black,
+      transparent 75%
+    );
+  }
+
+  /* Tiled star field — a few dots per tile, repeated */
+  .bg-stars {
+    background-image:
+      radial-gradient(1px 1px at 22% 31%, rgb(255 255 255 / 0.35), transparent),
+      radial-gradient(1px 1px at 68% 12%, rgb(255 255 255 / 0.25), transparent),
+      radial-gradient(1.5px 1.5px at 84% 64%, rgb(134 239 172 / 0.3), transparent),
+      radial-gradient(1px 1px at 41% 82%, rgb(255 255 255 / 0.2), transparent),
+      radial-gradient(1px 1px at 8% 58%, rgb(125 211 252 / 0.25), transparent);
+    background-size: 540px 540px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-aurora,
+  .animate-aurora-slow,
+  .animate-sheen,
+  .animate-pulse-dot {
+    animation: none;
+  }
 }

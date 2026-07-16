@@ -40,7 +40,7 @@ export function Header() {
         <nav className="ml-auto flex items-center gap-5 text-sm">
           <Link
             href="/insights"
-            className="rounded-md text-slate-300 transition-colors hover:text-portal-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-portal-500"
+            className="relative rounded-md text-slate-300 transition-colors after:absolute after:-bottom-1 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-gradient-to-r after:from-portal-400 after:to-rick-blue after:transition-transform after:duration-300 hover:text-portal-300 hover:after:scale-x-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-portal-500"
           >
             Insights
           </Link>

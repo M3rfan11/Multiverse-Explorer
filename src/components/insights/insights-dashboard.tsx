@@ -39,6 +39,16 @@ export function InsightsDashboard({
   const maxAppearances = analytics.topCharacters[0]?.appearances ?? 1;
   const maxResidents = analytics.topLocations[0]?.residents ?? 1;
 
+  // Top of the page animates on mount; chart sections reveal on scroll.
+  const reveal = reducedMotion
+    ? {}
+    : {
+        variants: fadeUp,
+        initial: "hidden" as const,
+        whileInView: "visible" as const,
+        viewport: { once: true, margin: "-60px" },
+      };
+
   return (
     <motion.div
       variants={staggerContainer}
@@ -46,14 +56,17 @@ export function InsightsDashboard({
       animate="visible"
       className="flex flex-col gap-6"
     >
-      <motion.section variants={fadeUp} className="py-10 md:py-14">
-        <h1 className="font-display text-4xl font-bold text-white md:text-5xl">
+      <motion.section variants={fadeUp} className="py-12 md:py-16">
+        <p className="font-mono text-xs tracking-[0.35em] text-portal-400">
+          MULTIVERSE ANALYTICS
+        </p>
+        <h1 className="mt-3 font-display text-5xl font-bold tracking-tight text-white md:text-6xl">
           Multiverse{" "}
-          <span className="bg-gradient-to-r from-portal-400 to-rick-blue bg-clip-text text-transparent">
+          <span className="animate-sheen bg-[linear-gradient(90deg,#4ADE80,#38BDF8,#4ADE80)] bg-[length:200%_auto] bg-clip-text text-transparent">
             Insights
           </span>
         </h1>
-        <p className="mt-3 max-w-xl text-slate-400">
+        <p className="mt-4 max-w-xl text-slate-400">
           Who exists in the multiverse, where they move, and how often they
           appear.
         </p>
@@ -80,7 +93,7 @@ export function InsightsDashboard({
       </motion.section>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <motion.section variants={fadeUp}>
+        <motion.section {...reveal}>
           <Card className="h-full p-5">
             <h2 className="font-display text-lg font-semibold text-white">
               Character status
@@ -91,7 +104,7 @@ export function InsightsDashboard({
           </Card>
         </motion.section>
 
-        <motion.section variants={fadeUp}>
+        <motion.section {...reveal}>
           <Card className="h-full p-5">
             <h2 className="font-display text-lg font-semibold text-white">
               Species
@@ -103,7 +116,7 @@ export function InsightsDashboard({
         </motion.section>
       </div>
 
-      <motion.section variants={fadeUp}>
+      <motion.section {...reveal}>
         <Card className="p-5">
           <h2 className="font-display text-lg font-semibold text-white">
             Cast size per episode
@@ -118,7 +131,7 @@ export function InsightsDashboard({
       </motion.section>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <motion.section variants={fadeUp}>
+        <motion.section {...reveal}>
           <Card className="h-full p-5">
             <h2 className="font-display text-lg font-semibold text-white">
               Appearance leaderboard
@@ -160,7 +173,7 @@ export function InsightsDashboard({
           </Card>
         </motion.section>
 
-        <motion.section variants={fadeUp}>
+        <motion.section {...reveal}>
           <Card className="h-full p-5">
             <h2 className="font-display text-lg font-semibold text-white">
               Most populated locations

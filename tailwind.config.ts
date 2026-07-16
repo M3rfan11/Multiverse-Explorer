@@ -43,11 +43,22 @@ const config: Config = {
           "0%": { transform: "translateX(-100%)" },
           "100%": { transform: "translateX(400%)" },
         },
+        aurora: {
+          "0%, 100%": { transform: "translate(0, 0) scale(1)" },
+          "50%": { transform: "translate(30px, -20px) scale(1.12)" },
+        },
+        sheen: {
+          "0%": { backgroundPosition: "0% center" },
+          "100%": { backgroundPosition: "-200% center" },
+        },
       },
       animation: {
         shimmer: "shimmer 1.8s linear infinite",
         "pulse-dot": "pulse-dot 2s ease-in-out infinite",
         progress: "progress 1s ease-in-out infinite",
+        aurora: "aurora 16s ease-in-out infinite",
+        "aurora-slow": "aurora 22s ease-in-out infinite reverse",
+        sheen: "sheen 6s linear infinite",
       },
     },
   },

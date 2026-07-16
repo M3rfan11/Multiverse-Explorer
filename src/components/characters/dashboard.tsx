@@ -6,6 +6,7 @@ import { useEffect, useRef } from "react";
 import { CountUp } from "@/components/ui/count-up";
 import { EmptyState } from "@/components/ui/empty-state";
 import { ErrorState } from "@/components/ui/error-state";
+import { PortalRing } from "@/components/ui/portal-ring";
 import { useCharacters } from "@/lib/hooks/use-characters";
 import {
   toCharacterFilters,
@@ -57,24 +58,28 @@ export function Dashboard() {
         </div>
       ) : null}
 
-      <section className="py-10 md:py-14">
-        <h1 className="font-display text-4xl font-bold text-white md:text-5xl">
+      <section className="relative py-12 md:py-16">
+        <PortalRing className="pointer-events-none absolute -right-8 -top-6 hidden size-64 opacity-10 md:block lg:size-72" />
+        <p className="font-mono text-xs tracking-[0.35em] text-portal-400">
+          CHARACTER DATABASE
+        </p>
+        <h1 className="mt-3 font-display text-5xl font-bold tracking-tight text-white md:text-6xl">
           Multiverse{" "}
-          <span className="bg-gradient-to-r from-portal-400 to-rick-blue bg-clip-text text-transparent">
+          <span className="animate-sheen bg-[linear-gradient(90deg,#4ADE80,#38BDF8,#4ADE80)] bg-[length:200%_auto] bg-clip-text text-transparent">
             Explorer
           </span>
         </h1>
-        <p className="mt-3 max-w-xl text-slate-400">
+        <p className="mt-4 max-w-xl text-slate-400">
           {totals ? (
             <>
-              Browse{" "}
               <span className="font-semibold text-portal-300">
                 <CountUp value={totals.info.count} />
               </span>{" "}
-              characters across every dimension of the Rick and Morty universe.
+              beings catalogued across infinite realities. Search by name,
+              filter by status and species.
             </>
           ) : (
-            "Browse characters across every dimension of the Rick and Morty universe."
+            "Beings catalogued across infinite realities. Search by name, filter by status and species."
           )}
         </p>
       </section>

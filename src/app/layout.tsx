@@ -28,7 +28,13 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable}`}>
       <body>
-        <div aria-hidden className="bg-portal-glow fixed inset-0 -z-10" />
+        <div aria-hidden className="fixed inset-0 -z-10 overflow-hidden">
+          <div className="bg-portal-glow absolute inset-0" />
+          <div className="bg-grid absolute inset-0" />
+          <div className="bg-stars absolute inset-0" />
+          <div className="absolute -top-40 left-1/4 size-[480px] animate-aurora rounded-full bg-portal-500/10 blur-3xl" />
+          <div className="absolute right-1/5 top-32 size-[420px] animate-aurora-slow rounded-full bg-rick-blue/10 blur-3xl" />
+        </div>
         <Providers>
           <Header />
           {children}

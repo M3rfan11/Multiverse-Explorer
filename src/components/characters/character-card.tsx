@@ -19,19 +19,26 @@ export function CharacterCard({ character }: CharacterCardProps) {
         className="block rounded-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-portal-500"
       >
         <article
-          className="overflow-hidden rounded-card border border-white/5 bg-space-900/60 backdrop-blur
+          className="relative overflow-hidden rounded-card border border-white/5 bg-space-900/60 backdrop-blur
             transition-all duration-300
             group-hover:-translate-y-1 group-hover:border-portal-500/40 group-hover:shadow-glow-md
             group-focus-within:-translate-y-1 group-focus-within:border-portal-500/40"
         >
+          <span
+            aria-hidden
+            className="absolute inset-x-4 top-0 z-10 h-px bg-gradient-to-r from-transparent via-portal-400/70 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+          />
           <div className="relative aspect-square overflow-hidden">
             <Image
               src={character.image}
               alt={character.name}
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
+              className="object-cover transition-all duration-300 group-hover:scale-105 group-hover:saturate-[1.25]"
             />
+            <span className="absolute right-2 top-2 rounded-md bg-space-950/70 px-1.5 py-0.5 font-mono text-[10px] text-portal-300 backdrop-blur">
+              #{String(character.id).padStart(3, "0")}
+            </span>
           </div>
           <div className="p-4">
             <h3
