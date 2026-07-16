@@ -39,10 +39,15 @@ const config: Config = {
           "0%, 100%": { opacity: "1", transform: "scale(1)" },
           "50%": { opacity: "0.5", transform: "scale(0.85)" },
         },
+        progress: {
+          "0%": { transform: "translateX(-100%)" },
+          "100%": { transform: "translateX(400%)" },
+        },
       },
       animation: {
         shimmer: "shimmer 1.8s linear infinite",
         "pulse-dot": "pulse-dot 2s ease-in-out infinite",
+        progress: "progress 1s ease-in-out infinite",
       },
     },
   },
