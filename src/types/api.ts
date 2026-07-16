@@ -60,3 +60,25 @@ export interface CharacterFilters {
   species?: string;
   page?: number;
 }
+
+/** Episode fields the detail page needs (GraphQL lets us ask for exactly these). */
+export interface EpisodeSummary {
+  id: number;
+  name: string;
+  air_date: string;
+  /** Episode code, e.g. "S01E01". */
+  episode: string;
+}
+
+/** Detail-page shape: character plus its episodes from one GraphQL query. */
+export interface CharacterWithEpisodes {
+  id: number;
+  name: string;
+  status: CharacterStatus;
+  species: string;
+  gender: CharacterGender;
+  image: string;
+  origin: { name: string };
+  location: { name: string };
+  episodes: EpisodeSummary[];
+}

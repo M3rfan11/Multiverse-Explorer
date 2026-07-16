@@ -1,7 +1,6 @@
 import type {
   Character,
   CharacterFilters,
-  Episode,
   PaginatedResponse,
 } from "@/types/api";
 
@@ -71,24 +70,3 @@ export async function getCharacters(
   }
 }
 
-export function getCharacter(id: number): Promise<Character> {
-  return apiFetch<Character>(`/character/${id}`);
-}
-
-/**
- * Batch-fetches episodes in a single request: /episode/1,2,3.
- * The API returns a bare object (not an array) when only one id
- * is requested — normalize to an array.
- */
-export async function getEpisodesByUrls(
-  episodeUrls: string[],
-): Promise<Episode[]> {
-  const ids = episodeUrls
-    .map((url) => Number(url.split("/").at(-1)))
-    .filter((id) => Number.isInteger(id) && id > 0);
-
-  if (ids.length === 0) return [];
-
-  const data = await apiFetch<Episode | Episode[]>(`/episode/${ids.join(",")}`);
-  return Array.isArray(data) ? data : [data];
-}

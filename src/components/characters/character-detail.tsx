@@ -8,13 +8,18 @@ import { useEffect, useState } from "react";
 import { ErrorState } from "@/components/ui/error-state";
 import { Skeleton } from "@/components/ui/skeleton";
 import { StatusBadge } from "@/components/ui/status-badge";
-import { useCharacter } from "@/lib/hooks/use-character";
+import { useCharacterWithEpisodes } from "@/lib/hooks/use-character-with-episodes";
 import { fadeUp, scaleEntrance, staggerContainer } from "@/lib/motion";
-import type { Character } from "@/types/api";
+import type { CharacterWithEpisodes } from "@/types/api";
 import { EpisodeList } from "./episode-list";
 
 export function CharacterDetail({ id }: { id: number }) {
-  const { data: character, isPending, isError, refetch } = useCharacter(id);
+  const {
+    data: character,
+    isPending,
+    isError,
+    refetch,
+  } = useCharacterWithEpisodes(id);
 
   // The dashboard saves its query string on every filter change, so
   // "back" returns to the exact filtered/paged view. Set after mount
@@ -42,17 +47,17 @@ export function CharacterDetail({ id }: { id: number }) {
       <section className="mt-12">
         <h2 className="font-display text-xl font-semibold text-white">
           Episodes{" "}
-          <span className="text-slate-500">({character.episode.length})</span>
+          <span className="text-slate-500">({character.episodes.length})</span>
         </h2>
         <div className="mt-4">
-          <EpisodeList episodeUrls={character.episode} />
+          <EpisodeList episodes={character.episodes} />
         </div>
       </section>
     </>
   );
 }
 
-function DetailHero({ character }: { character: Character }) {
+function DetailHero({ character }: { character: CharacterWithEpisodes }) {
   const reducedMotion = useReducedMotion();
 
   const meta: { label: string; value: string }[] = [

@@ -7,6 +7,6 @@ import type { CharacterFilters } from "@/types/api";
  */
 export const queryKeys = {
   characters: (filters: CharacterFilters) => ["characters", filters] as const,
-  character: (id: number) => ["character", id] as const,
-  episodes: (episodeUrls: string[]) => ["episodes", ...episodeUrls] as const,
+  characterWithEpisodes: (id: number) =>
+    ["character-with-episodes", id] as const,
 };

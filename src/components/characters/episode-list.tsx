@@ -2,35 +2,15 @@
 
 import cn from "classnames";
 import { motion, useReducedMotion } from "framer-motion";
-import { ErrorState } from "@/components/ui/error-state";
-import { Skeleton } from "@/components/ui/skeleton";
-import { useEpisodes } from "@/lib/hooks/use-episodes";
 import { fadeIn, staggerContainer } from "@/lib/motion";
+import type { EpisodeSummary } from "@/types/api";
 
-export function EpisodeList({ episodeUrls }: { episodeUrls: string[] }) {
-  const { data: episodes, isPending, isError, refetch } =
-    useEpisodes(episodeUrls);
+/**
+ * Purely presentational — episodes arrive with the character in one
+ * GraphQL query, so this component has no loading or error states.
+ */
+export function EpisodeList({ episodes }: { episodes: EpisodeSummary[] }) {
   const reducedMotion = useReducedMotion();
-
-  if (isPending) {
-    return (
-      <div className="flex flex-col gap-2">
-        {Array.from({ length: Math.min(episodeUrls.length, 6) }, (_, i) => (
-          <Skeleton key={i} className="h-12" />
-        ))}
-      </div>
-    );
-  }
-
-  if (isError) {
-    return (
-      <ErrorState
-        title="Couldn't load episodes"
-        description="The episode list failed to fetch."
-        onRetry={() => refetch()}
-      />
-    );
-  }
 
   const scrollable = episodes.length > 10;
 
