@@ -13,7 +13,9 @@ import { ApiError } from "./client";
  * The dashboard stays on REST — its pagination/filter API maps 1:1 already.
  */
 
-const client = new GraphQLClient("https://rickandmortyapi.com/graphql");
+export const graphqlClient = new GraphQLClient(
+  "https://rickandmortyapi.com/graphql",
+);
 
 const CHARACTER_WITH_EPISODES = gql`
   query CharacterWithEpisodes($id: ID!) {
@@ -60,7 +62,7 @@ interface RawCharacterResponse {
   } | null;
 }
 
-function toStatus(raw: string): CharacterStatus {
+export function toStatus(raw: string): CharacterStatus {
   return raw === "Alive" || raw === "Dead" ? raw : "unknown";
 }
 
@@ -75,9 +77,10 @@ export async function getCharacterWithEpisodes(
 ): Promise<CharacterWithEpisodes> {
   let data: RawCharacterResponse;
   try {
-    data = await client.request<RawCharacterResponse>(CHARACTER_WITH_EPISODES, {
-      id,
-    });
+    data = await graphqlClient.request<RawCharacterResponse>(
+      CHARACTER_WITH_EPISODES,
+      { id },
+    );
   } catch (error) {
     // The API reports a missing character as a GraphQL error "404: Not Found".
     if (error instanceof Error && error.message.includes("404")) {

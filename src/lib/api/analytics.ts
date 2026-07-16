@@ -1,76 +1,101 @@
+import { ClientError } from "graphql-request";
 import { unstable_cache } from "next/cache";
-import type {
-  Character,
-  Episode,
-  Location,
-  PaginatedResponse,
-} from "@/types/api";
 import type { AnalyticsResponse } from "@/types/analytics";
+import { graphqlClient, toStatus } from "./graphql";
 
 /**
- * Server-only analytics service. The full dataset spans ~52 paginated
- * REST requests (42 character + 7 location + 3 episode pages); each is
- * fetched with a 1-hour cache (`next.revalidate`), so after the first
- * render the whole page is served from cached data. The client receives
- * one aggregated payload and never talks to the API itself.
+ * Server-only analytics service.
+ *
+ * The dataset spans ~52 REST pages, and bursts of that size trip the
+ * API's Cloudflare rate limit — especially from shared serverless egress
+ * IPs. GraphQL aliases collapse the problem: every page of a resource is
+ * requested in ONE query (`p1: characters(page: 1) {...} p2: ...`), so
+ * the whole aggregation costs 4 HTTP requests, each asking for exactly
+ * the fields the analytics need. The computed result is then cached for
+ * an hour, so the work runs at most once per revalidation window.
  */
 
-const BASE_URL = "https://rickandmortyapi.com/api";
 const REVALIDATE_SECONDS = 3600;
-/** The API sits behind Cloudflare rate limiting — fetch in small waves, not one burst. */
-const PAGE_CONCURRENCY = 4;
-const WAVE_DELAY_MS = 250;
 const RETRY_AFTER_429_MS = 2500;
 const TOP_SPECIES = 9;
 const TOP_CHARACTERS = 10;
 const TOP_LOCATIONS = 8;
 
-type Resource = "character" | "location" | "episode";
+interface RawCharacter {
+  id: string;
+  name: string;
+  image: string;
+  status: string;
+  species: string;
+  origin: { name: string } | null;
+  location: { name: string } | null;
+  episode: { id: string }[];
+}
+
+interface RawLocation {
+  id: string;
+  name: string;
+  type: string;
+  dimension: string;
+  residents: { id: string }[];
+}
+
+interface RawEpisode {
+  id: string;
+  name: string;
+  episode: string;
+  air_date: string;
+  characters: { id: string }[];
+}
+
+interface PageInfoResponse {
+  characters: { info: { pages: number } };
+  locations: { info: { pages: number } };
+  episodes: { info: { pages: number } };
+}
 
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-async function fetchPage<T>(
-  resource: Resource,
-  page: number,
-  attempt = 1,
-): Promise<PaginatedResponse<T>> {
-  const response = await fetch(`${BASE_URL}/${resource}?page=${page}`, {
-    next: { revalidate: REVALIDATE_SECONDS },
-  });
-
-  // Rate-limited: back off once before giving up.
-  if (response.status === 429 && attempt === 1) {
-    await sleep(RETRY_AFTER_429_MS);
-    return fetchPage<T>(resource, page, attempt + 1);
-  }
-
-  if (!response.ok) {
-    throw new Error(
-      `Failed to fetch ${resource} page ${page} (${response.status})`,
-    );
-  }
-  return response.json() as Promise<PaginatedResponse<T>>;
+function isRateLimited(error: unknown): boolean {
+  return error instanceof ClientError && error.response.status === 429;
 }
 
-async function fetchAll<T>(resource: Resource): Promise<T[]> {
-  const first = await fetchPage<T>(resource, 1);
-  const remaining = Array.from(
-    { length: first.info.pages - 1 },
-    (_, i) => i + 2,
-  );
-
-  const results: T[] = [...first.results];
-  for (let i = 0; i < remaining.length; i += PAGE_CONCURRENCY) {
-    const wave = remaining.slice(i, i + PAGE_CONCURRENCY);
-    const pages = await Promise.all(
-      wave.map((page) => fetchPage<T>(resource, page)),
-    );
-    results.push(...pages.flatMap((page) => page.results));
-    if (i + PAGE_CONCURRENCY < remaining.length) await sleep(WAVE_DELAY_MS);
+async function request<T>(query: string, attempt = 1): Promise<T> {
+  try {
+    return await graphqlClient.request<T>(query);
+  } catch (error) {
+    if (isRateLimited(error) && attempt === 1) {
+      await sleep(RETRY_AFTER_429_MS);
+      return request<T>(query, attempt + 1);
+    }
+    throw error;
   }
-  return results;
+}
+
+/** Builds `p1: resource(page: 1) { results { ...fields } } p2: ...` */
+function allPagesQuery(
+  resource: "characters" | "locations" | "episodes",
+  pages: number,
+  fields: string,
+): string {
+  const aliases = Array.from(
+    { length: pages },
+    (_, i) => `p${i + 1}: ${resource}(page: ${i + 1}) { results { ${fields} } }`,
+  );
+  return `query { ${aliases.join(" ")} }`;
+}
+
+async function fetchAll<T>(
+  resource: "characters" | "locations" | "episodes",
+  pages: number,
+  fields: string,
+): Promise<T[]> {
+  const data = await request<Record<string, { results: T[] }>>(
+    allPagesQuery(resource, pages, fields),
+  );
+  return Object.values(data).flatMap((page) => page.results);
 }
 
 function countBy<T>(items: T[], key: (item: T) => string): Map<string, number> {
@@ -83,24 +108,37 @@ function countBy<T>(items: T[], key: (item: T) => string): Map<string, number> {
 }
 
 async function computeAnalytics(): Promise<AnalyticsResponse> {
-  // Sequential per resource (each already fetches in waves) to stay
-  // well under the API's rate limit.
-  const characters = await fetchAll<Character>("character");
-  const locations = await fetchAll<Location>("location");
-  const episodes = await fetchAll<Episode>("episode");
+  const info = await request<PageInfoResponse>(
+    `query { characters { info { pages } } locations { info { pages } } episodes { info { pages } } }`,
+  );
 
-  const alive = characters.filter((c) => c.status === "Alive").length;
-  const dead = characters.filter((c) => c.status === "Dead").length;
+  const characters = await fetchAll<RawCharacter>(
+    "characters",
+    info.characters.info.pages,
+    "id name image status species origin { name } location { name } episode { id }",
+  );
+  const locations = await fetchAll<RawLocation>(
+    "locations",
+    info.locations.info.pages,
+    "id name type dimension residents { id }",
+  );
+  const episodes = await fetchAll<RawEpisode>(
+    "episodes",
+    info.episodes.info.pages,
+    "id name episode air_date characters { id }",
+  );
+
+  const alive = characters.filter((c) => toStatus(c.status) === "Alive").length;
+  const dead = characters.filter((c) => toStatus(c.status) === "Dead").length;
 
   // "Travellers": last-known location differs from origin.
   // Unknown origins/locations are excluded — we can't claim movement
   // we can't observe.
-  const travellers = characters.filter(
-    (c) =>
-      c.origin.name !== "unknown" &&
-      c.location.name !== "unknown" &&
-      c.origin.name !== c.location.name,
-  ).length;
+  const travellers = characters.filter((c) => {
+    const origin = c.origin?.name ?? "unknown";
+    const location = c.location?.name ?? "unknown";
+    return origin !== "unknown" && location !== "unknown" && origin !== location;
+  }).length;
 
   const speciesCounts = [...countBy(characters, (c) => c.species)].sort(
     (a, b) => b[1] - a[1],
@@ -127,7 +165,7 @@ async function computeAnalytics(): Promise<AnalyticsResponse> {
     charactersByStatus: (["Alive", "Dead", "unknown"] as const).map(
       (status) => ({
         status,
-        count: characters.filter((c) => c.status === status).length,
+        count: characters.filter((c) => toStatus(c.status) === status).length,
       }),
     ),
     topSpecies,
@@ -140,7 +178,7 @@ async function computeAnalytics(): Promise<AnalyticsResponse> {
       .sort((a, b) => b.episode.length - a.episode.length)
       .slice(0, TOP_CHARACTERS)
       .map((c) => ({
-        id: c.id,
+        id: Number(c.id),
         name: c.name,
         image: c.image,
         appearances: c.episode.length,
@@ -149,7 +187,7 @@ async function computeAnalytics(): Promise<AnalyticsResponse> {
       .sort((a, b) => b.residents.length - a.residents.length)
       .slice(0, TOP_LOCATIONS)
       .map((l) => ({
-        id: l.id,
+        id: Number(l.id),
         name: l.name,
         type: l.type,
         dimension: l.dimension,
@@ -159,9 +197,8 @@ async function computeAnalytics(): Promise<AnalyticsResponse> {
 }
 
 /**
- * The computed result itself is cached for an hour, so the ~52-request
- * aggregation runs at most once per revalidation window — not once per
- * page view.
+ * The computed result itself is cached for an hour, so the aggregation
+ * runs at most once per revalidation window — not once per page view.
  */
 export const getAnalytics = unstable_cache(
   computeAnalytics,
