@@ -37,6 +37,14 @@ export function Header() {
             Explorer
           </span>
         </Link>
+        <nav className="ml-auto flex items-center gap-5 text-sm">
+          <Link
+            href="/insights"
+            className="rounded-md text-slate-300 transition-colors hover:text-portal-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-portal-500"
+          >
+            Insights
+          </Link>
+        </nav>
       </div>
     </header>
   );

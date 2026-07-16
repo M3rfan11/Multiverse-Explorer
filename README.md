@@ -43,6 +43,8 @@ Two reasons. First, it lets the character detail page demonstrate a real server/
 
 **Styling** is Tailwind with all design tokens in `tailwind.config.ts` (no hard-coded hex in components). All conditional class logic goes through `classnames` — the clearest example is `StatusBadge`, where the status→color mapping is keyed on a TypeScript union (`"Alive" | "Dead" | "unknown"`), so an unhandled status is a compile error, not a gray fallback.
 
+**The Insights page (`/insights`) aggregates server-side.** The full dataset spans ~52 paginated REST requests (characters, locations, episodes). Rather than having each chart fetch independently, a server-only service (`lib/api/analytics.ts`) fetches all pages in parallel — each cached for an hour via `next.revalidate` — computes every aggregate once, and hands the client a single typed payload. The client renders charts (Recharts) and never talks to the API. Includes KPI totals, a status doughnut, species treemap, cast-size-per-episode timeline, an appearance leaderboard, and the most populated locations.
+
 **Motion** lives in `lib/motion/index.ts` — one vocabulary of durations, easings, and variants that components import, so nothing invents its own timing. Everything animates transform/opacity only. All entrance animations respect `prefers-reduced-motion`.
 
 ## Trade-offs, given the time box

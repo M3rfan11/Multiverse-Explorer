@@ -41,6 +41,17 @@ export interface Episode {
   created: string;
 }
 
+export interface Location {
+  id: number;
+  name: string;
+  type: string;
+  dimension: string;
+  /** URLs of characters last seen at this location. */
+  residents: string[];
+  url: string;
+  created: string;
+}
+
 export interface PaginationInfo {
   count: number;
   pages: number;
