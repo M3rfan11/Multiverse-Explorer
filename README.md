@@ -2,7 +2,7 @@
 
 A responsive app for browsing Rick and Morty characters and the episodes they appear in.
 
-Live demo: _add your Vercel URL here_
+**Live demo:** https://multiverse-explorer.vercel.app
 
 ## Running it
 
@@ -22,6 +22,12 @@ npm run dev
 ```
 
 Other scripts: `npm run build`, `npm run lint`, `npm run typecheck`, `npm test`.
+
+## Quality checks
+
+Every push runs typecheck, lint, tests, and a production build in CI (GitHub Actions — see `.github/workflows/ci.yml`).
+
+Measured on the live deployment via PageSpeed Insights: **Performance 90 (mobile) / 100 (desktop), Accessibility 98, Best Practices 100, SEO 100** — desktop LCP 0.7s, CLS ≈ 0.
 
 ## Stack
 
@@ -54,7 +60,7 @@ Two reasons. First, it lets the character detail page demonstrate a real server/
 - **Pagination over infinite scroll**, because pages are URL-addressable (`?page=5` is a place you can link to; scroll position isn't).
 - **Curated species filter list** rather than deriving species from data — the API has no endpoint for distinct species values.
 - **Dashboard fetches client-side** (with skeletons) while the detail page is server-prefetched. Filters are interactive client state anyway; the detail page is where SSR actually improves first paint and demonstrates the hydration boundary.
-- **Tests target logic, not markup.** Vitest + Testing Library + MSW (no real network — unhandled requests fail the test). Covered: `useCharacters` (success, 404-as-empty, server error, and the `keepPreviousData` pagination behavior), `useDashboardFilters` (URL parsing, garbage-param sanitizing, replace-vs-push semantics), and `StatusBadge` (the status→color mapping). Snapshot-testing every component would add noise, not confidence.
+- **Tests target logic and flows, not markup.** 17 tests via Vitest + Testing Library + MSW (no real network — unhandled requests fail the test). Unit coverage: `useCharacters` (success, 404-as-empty, server error, `keepPreviousData` pagination), `useDashboardFilters` (URL parsing, garbage-param sanitizing, replace-vs-push semantics), `StatusBadge` (status→color mapping). Integration coverage: the dashboard flow (URL filter → mocked API → rendered results/empty state, debounced search → URL, pagination → history push) and the detail page rendering a character with episodes from the mocked GraphQL endpoint. Snapshot-testing every component would add noise, not confidence.
 
 ## Project structure
 

@@ -1,4 +1,4 @@
-import { http, HttpResponse } from "msw";
+import { graphql, http, HttpResponse } from "msw";
 import { setupServer } from "msw/node";
 import type { Character, PaginatedResponse } from "@/types/api";
 
@@ -43,6 +43,29 @@ export const handlers = [
     };
     return HttpResponse.json(body);
   }),
+
+  // Detail page + featured specimen (GraphQL). Raw shape mirrors the real
+  // endpoint: string ids, plain-string status.
+  graphql.query("CharacterWithEpisodes", ({ variables }) =>
+    HttpResponse.json({
+      data: {
+        character: {
+          id: String(variables.id),
+          name: "Rick Sanchez",
+          status: "Alive",
+          species: "Human",
+          gender: "Male",
+          image: "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
+          origin: { name: "Earth (C-137)" },
+          location: { name: "Citadel of Ricks" },
+          episode: [
+            { id: "1", name: "Pilot", air_date: "December 2, 2013", episode: "S01E01" },
+            { id: "2", name: "Lawnmower Dog", air_date: "December 9, 2013", episode: "S01E02" },
+          ],
+        },
+      },
+    }),
+  ),
 ];
 
 export const server = setupServer(...handlers);
