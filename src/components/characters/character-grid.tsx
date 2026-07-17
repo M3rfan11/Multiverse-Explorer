@@ -24,8 +24,12 @@ export function CharacterGrid({ characters, filterKey }: CharacterGridProps) {
   if (reducedMotion) {
     return (
       <ul className={GRID_CLASSES}>
-        {characters.map((character) => (
-          <CharacterCard key={character.id} character={character} />
+        {characters.map((character, index) => (
+          <CharacterCard
+            key={character.id}
+            character={character}
+            priority={index < 4}
+          />
         ))}
       </ul>
     );
@@ -39,8 +43,12 @@ export function CharacterGrid({ characters, filterKey }: CharacterGridProps) {
       initial="hidden"
       animate="visible"
     >
-      {characters.map((character) => (
-        <CharacterCard key={character.id} character={character} />
+      {characters.map((character, index) => (
+        <CharacterCard
+          key={character.id}
+          character={character}
+          priority={index < 4}
+        />
       ))}
     </motion.ul>
   );

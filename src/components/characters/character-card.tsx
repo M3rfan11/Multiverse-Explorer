@@ -15,11 +15,13 @@ import type { Character } from "@/types/api";
 
 interface CharacterCardProps {
   character: Character;
+  /** Eagerly load above-the-fold images (first row) — helps mobile LCP. */
+  priority?: boolean;
 }
 
 const MAX_TILT_DEG = 5;
 
-export function CharacterCard({ character }: CharacterCardProps) {
+export function CharacterCard({ character, priority = false }: CharacterCardProps) {
   const reducedMotion = useReducedMotion();
 
   // 3D tilt is desktop-only: touch devices fire synthetic mouse events
@@ -78,6 +80,7 @@ export function CharacterCard({ character }: CharacterCardProps) {
               src={character.image}
               alt={character.name}
               fill
+              priority={priority}
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
               className="object-cover transition-all duration-300 group-hover:scale-105 group-hover:saturate-[1.25]"
             />
