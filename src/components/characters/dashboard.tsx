@@ -1,18 +1,16 @@
 "use client";
 
 import cn from "classnames";
-import { motion, useReducedMotion, useTransform } from "framer-motion";
+import { useReducedMotion } from "framer-motion";
 import { useEffect, useRef } from "react";
 import { CountUp } from "@/components/ui/count-up";
 import { EmptyState } from "@/components/ui/empty-state";
 import { ErrorState } from "@/components/ui/error-state";
-import { PortalRing } from "@/components/ui/portal-ring";
 import { useCharacters } from "@/lib/hooks/use-characters";
 import {
   toCharacterFilters,
   useDashboardFilters,
 } from "@/lib/hooks/use-dashboard-filters";
-import { usePointerParallax } from "@/lib/hooks/use-pointer-parallax";
 import { CharacterGrid, CharacterGridSkeleton } from "./character-grid";
 import { FilterBar } from "./filter-bar";
 import { Pagination } from "./pagination";
@@ -27,11 +25,6 @@ export function Dashboard() {
   const { data: totals } = useCharacters({ page: 1 });
   const { data: aliveTotals } = useCharacters({ status: "Alive", page: 1 });
   const reducedMotion = useReducedMotion();
-
-  // The hero's portal ring drifts opposite the cursor for depth.
-  const pointer = usePointerParallax();
-  const ringX = useTransform(pointer.x, (v) => v * -30);
-  const ringY = useTransform(pointer.y, (v) => v * -20);
 
   // Scroll back to the top when the page changes (not on filter changes —
   // the user is already at the filter bar when filtering).
@@ -65,13 +58,7 @@ export function Dashboard() {
         </div>
       ) : null}
 
-      <section className="relative py-12 md:py-16">
-        <motion.span
-          style={{ x: ringX, y: ringY }}
-          className="pointer-events-none absolute -right-12 -top-2 md:-right-8 md:-top-6"
-        >
-          <PortalRing className="size-44 opacity-10 md:size-64 lg:size-72" />
-        </motion.span>
+      <section className="py-12 md:py-16">
         <h1 className="font-logo text-5xl tracking-wide text-white md:text-6xl">
           Multiverse <span className="text-portal-400">Explorer</span>
         </h1>

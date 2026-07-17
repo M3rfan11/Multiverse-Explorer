@@ -23,7 +23,7 @@ export function Header() {
       className={cn(
         "sticky top-0 z-40 border-b transition-all duration-300",
         scrolled
-          ? "border-white/5 bg-space-950/80 py-3 backdrop-blur"
+          ? "border-white/10 bg-space-950 py-3"
           : "border-transparent bg-transparent py-5",
       )}
     >

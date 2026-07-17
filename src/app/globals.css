@@ -27,41 +27,6 @@
   }
 }
 
-@layer utilities {
-  /* Fixed radial portal glow behind everything, GPU-composited */
-  .bg-portal-glow {
-    background-image: radial-gradient(
-      ellipse 80% 50% at 50% -10%,
-      rgb(34 197 94 / 0.06),
-      transparent
-    );
-  }
-
-  /* Faint blueprint grid, fading out below the fold */
-  .bg-grid {
-    background-image:
-      linear-gradient(rgb(148 163 184 / 0.045) 1px, transparent 1px),
-      linear-gradient(90deg, rgb(148 163 184 / 0.045) 1px, transparent 1px);
-    background-size: 64px 64px;
-    mask-image: radial-gradient(
-      ellipse 90% 60% at 50% 0%,
-      black,
-      transparent 75%
-    );
-  }
-
-  /* Tiled star field — a few dots per tile, repeated */
-  .bg-stars {
-    background-image:
-      radial-gradient(1px 1px at 22% 31%, rgb(255 255 255 / 0.35), transparent),
-      radial-gradient(1px 1px at 68% 12%, rgb(255 255 255 / 0.25), transparent),
-      radial-gradient(1.5px 1.5px at 84% 64%, rgb(134 239 172 / 0.3), transparent),
-      radial-gradient(1px 1px at 41% 82%, rgb(255 255 255 / 0.2), transparent),
-      radial-gradient(1px 1px at 8% 58%, rgb(125 211 252 / 0.25), transparent);
-    background-size: 540px 540px;
-  }
-}
-
 /* The UFO companion replaces the native cursor. The class is added by
    the component itself, so this only applies when the ship is actually
    on screen (fine pointer, no reduced-motion). Text fields keep the
@@ -76,44 +41,8 @@ html.cursor-companion textarea {
   cursor: text;
 }
 
-/* Floating portal motes (see components/layout/particles.tsx) */
-.particle {
-  position: absolute;
-  top: 0;
-  border-radius: 9999px;
-  opacity: 0;
-  animation-name: float-up;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-  will-change: transform, opacity;
-}
-
-@keyframes float-up {
-  0% {
-    transform: translate3d(0, 105vh, 0) scale(1);
-    opacity: 0;
-  }
-  10% {
-    opacity: var(--glow, 0.4);
-  }
-  90% {
-    opacity: var(--glow, 0.4);
-  }
-  100% {
-    transform: translate3d(var(--drift, 20px), -8vh, 0) scale(1.2);
-    opacity: 0;
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .animate-aurora,
-  .animate-aurora-slow,
   .animate-pulse-dot {
     animation: none;
-  }
-
-  .particle {
-    animation: none;
-    opacity: 0;
   }
 }

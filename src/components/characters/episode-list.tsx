@@ -20,7 +20,7 @@ export function EpisodeList({ episodes }: { episodes: EpisodeSummary[] }) {
       initial={reducedMotion ? false : "hidden"}
       animate="visible"
       className={cn(
-        "flex flex-col gap-1 rounded-card border border-white/5 bg-space-900/40 p-2",
+        "flex flex-col gap-1 rounded-card border border-white/10 bg-space-900 p-2",
         scrollable &&
           "max-h-96 overflow-y-auto [mask-image:linear-gradient(to_bottom,black_calc(100%-2rem),transparent)]",
       )}
