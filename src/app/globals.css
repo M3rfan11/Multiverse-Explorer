@@ -3,6 +3,15 @@
 @tailwind utilities;
 
 @layer base {
+  /* Decorative elements (portal ring, parallax) intentionally bleed past
+     the right edge. `clip` prevents them widening the page on mobile
+     without creating a scroll container — which would break the sticky
+     header the way `overflow: hidden` does. */
+  html,
+  body {
+    overflow-x: clip;
+  }
+
   body {
     @apply bg-space-950 text-slate-200 antialiased;
   }
