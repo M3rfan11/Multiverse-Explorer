@@ -83,6 +83,14 @@ function DetailHero({ character }: { character: CharacterWithEpisodes }) {
           sizes="(max-width: 768px) 100vw, 320px"
           className="object-cover"
         />
+        {character.status === "Dead" ? (
+          <span
+            aria-hidden
+            className="absolute left-3 top-5 -rotate-12 rounded-sm border-2 border-red-400/80 bg-space-950/40 px-2.5 py-0.5 font-mono text-sm font-bold uppercase tracking-[0.2em] text-red-400"
+          >
+            Deceased
+          </span>
+        ) : null}
       </motion.div>
 
       <motion.div
