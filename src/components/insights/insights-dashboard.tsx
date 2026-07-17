@@ -57,14 +57,8 @@ export function InsightsDashboard({
       className="flex flex-col gap-6"
     >
       <motion.section variants={fadeUp} className="py-12 md:py-16">
-        <p className="font-mono text-xs tracking-[0.35em] text-portal-400">
-          MULTIVERSE ANALYTICS
-        </p>
-        <h1 className="mt-3 font-logo text-5xl tracking-wide text-white md:text-6xl">
-          Multiverse{" "}
-          <span className="animate-sheen bg-[linear-gradient(90deg,#4ADE80,#38BDF8,#4ADE80)] bg-[length:200%_auto] bg-clip-text text-transparent">
-            Insights
-          </span>
+        <h1 className="font-logo text-5xl tracking-wide text-white md:text-6xl">
+          Multiverse <span className="text-portal-400">Insights</span>
         </h1>
         <p className="mt-4 max-w-xl text-slate-400">
           Who exists in the multiverse, where they move, and how often they

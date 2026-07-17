@@ -108,7 +108,6 @@ html.cursor-companion textarea {
 @media (prefers-reduced-motion: reduce) {
   .animate-aurora,
   .animate-aurora-slow,
-  .animate-sheen,
   .animate-pulse-dot {
     animation: none;
   }

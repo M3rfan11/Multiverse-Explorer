@@ -32,10 +32,7 @@ export function Header() {
           href="/"
           className="rounded-md font-logo text-lg tracking-wide text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-portal-500"
         >
-          Multiverse{" "}
-          <span className="bg-gradient-to-r from-portal-400 to-rick-blue bg-clip-text text-transparent">
-            Explorer
-          </span>
+          Multiverse <span className="text-portal-400">Explorer</span>
         </Link>
         <nav className="ml-auto flex items-center gap-5 text-sm">
           <Link

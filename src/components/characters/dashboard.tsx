@@ -25,6 +25,7 @@ export function Dashboard() {
   // Unfiltered count for the hero. Shares a cache entry with the default
   // dashboard view (identical query key), so it usually costs no request.
   const { data: totals } = useCharacters({ page: 1 });
+  const { data: aliveTotals } = useCharacters({ status: "Alive", page: 1 });
   const reducedMotion = useReducedMotion();
 
   // The hero's portal ring drifts opposite the cursor for depth.
@@ -71,14 +72,8 @@ export function Dashboard() {
         >
           <PortalRing className="size-44 opacity-10 md:size-64 lg:size-72" />
         </motion.span>
-        <p className="font-mono text-xs tracking-[0.35em] text-portal-400">
-          CHARACTER DATABASE
-        </p>
-        <h1 className="mt-3 font-logo text-5xl tracking-wide text-white md:text-6xl">
-          Multiverse{" "}
-          <span className="animate-sheen bg-[linear-gradient(90deg,#4ADE80,#38BDF8,#4ADE80)] bg-[length:200%_auto] bg-clip-text text-transparent">
-            Explorer
-          </span>
+        <h1 className="font-logo text-5xl tracking-wide text-white md:text-6xl">
+          Multiverse <span className="text-portal-400">Explorer</span>
         </h1>
         <p className="mt-4 max-w-xl text-slate-400">
           {totals ? (
@@ -86,11 +81,13 @@ export function Dashboard() {
               <span className="font-semibold text-portal-300">
                 <CountUp value={totals.info.count} />
               </span>{" "}
-              beings catalogued across infinite realities. Search by name,
-              filter by status and species.
+              beings catalogued across infinite realities
+              {aliveTotals
+                ? `. ${aliveTotals.info.count.toLocaleString()} still alive — for now.`
+                : "."}
             </>
           ) : (
-            "Beings catalogued across infinite realities. Search by name, filter by status and species."
+            "Beings catalogued across infinite realities."
           )}
         </p>
       </section>

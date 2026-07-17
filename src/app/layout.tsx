@@ -62,6 +62,17 @@ export default function RootLayout({
           <Header />
           {children}
         </Providers>
+        <footer className="mx-auto max-w-7xl px-4 pb-8 md:px-8 lg:px-12">
+          <div className="border-t border-white/5 pt-6 text-xs text-slate-500">
+            Built by Mahmoud Irfan for the Tempo take-home · Data from{" "}
+            <a
+              href="https://rickandmortyapi.com"
+              className="underline-offset-2 hover:text-portal-300 hover:underline"
+            >
+              rickandmortyapi.com
+            </a>
+          </div>
+        </footer>
       </body>
     </html>
   );
