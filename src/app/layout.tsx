@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Chakra_Petch, Inter, Space_Mono } from "next/font/google";
+import { AuroraBlobs } from "@/components/layout/aurora-blobs";
+import { CursorCompanion } from "@/components/layout/cursor-companion";
 import { Header } from "@/components/layout/header";
 import { Particles } from "@/components/layout/particles";
 import { Providers } from "./providers";
@@ -44,10 +46,10 @@ export default function RootLayout({
           <div className="bg-portal-glow absolute inset-0" />
           <div className="bg-grid absolute inset-0" />
           <div className="bg-stars absolute inset-0" />
-          <div className="absolute -top-40 left-1/4 size-[480px] animate-aurora rounded-full bg-portal-500/10 blur-3xl" />
-          <div className="absolute right-1/5 top-32 size-[420px] animate-aurora-slow rounded-full bg-rick-blue/10 blur-3xl" />
+          <AuroraBlobs />
           <Particles />
         </div>
+        <CursorCompanion />
         <Providers>
           <Header />
           {children}

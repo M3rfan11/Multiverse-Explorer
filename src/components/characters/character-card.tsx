@@ -1,8 +1,14 @@
 "use client";
 
-import { motion } from "framer-motion";
+import {
+  motion,
+  useMotionValue,
+  useReducedMotion,
+  useSpring,
+} from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState, type MouseEvent } from "react";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { fadeUp } from "@/lib/motion";
 import type { Character } from "@/types/api";
@@ -11,9 +17,47 @@ interface CharacterCardProps {
   character: Character;
 }
 
+const MAX_TILT_DEG = 5;
+
 export function CharacterCard({ character }: CharacterCardProps) {
+  const reducedMotion = useReducedMotion();
+
+  // 3D tilt is desktop-only: touch devices fire synthetic mouse events
+  // on tap, which would jolt the card. Checked after mount (SSR-safe).
+  const [canTilt, setCanTilt] = useState(false);
+  useEffect(() => {
+    setCanTilt(
+      window.matchMedia("(hover: hover) and (pointer: fine)").matches,
+    );
+  }, []);
+
+  const tiltX = useMotionValue(0);
+  const tiltY = useMotionValue(0);
+  const rotateX = useSpring(tiltX, { stiffness: 220, damping: 18 });
+  const rotateY = useSpring(tiltY, { stiffness: 220, damping: 18 });
+
+  const handleMouseMove = (event: MouseEvent<HTMLLIElement>) => {
+    if (!canTilt || reducedMotion) return;
+    const rect = event.currentTarget.getBoundingClientRect();
+    const px = (event.clientX - rect.left) / rect.width - 0.5;
+    const py = (event.clientY - rect.top) / rect.height - 0.5;
+    tiltY.set(px * MAX_TILT_DEG * 2);
+    tiltX.set(-py * MAX_TILT_DEG * 2);
+  };
+
+  const resetTilt = () => {
+    tiltX.set(0);
+    tiltY.set(0);
+  };
+
   return (
-    <motion.li variants={fadeUp} className="group list-none">
+    <motion.li
+      variants={fadeUp}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={resetTilt}
+      style={{ rotateX, rotateY, transformPerspective: 900 }}
+      className="group list-none"
+    >
       <Link
         href={`/character/${character.id}`}
         className="block rounded-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-portal-500"
