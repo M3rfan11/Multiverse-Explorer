@@ -74,7 +74,7 @@ export function Dashboard() {
         <p className="font-mono text-xs tracking-[0.35em] text-portal-400">
           CHARACTER DATABASE
         </p>
-        <h1 className="mt-3 font-display text-5xl font-bold tracking-tight text-white md:text-6xl">
+        <h1 className="mt-3 font-logo text-5xl tracking-wide text-white md:text-6xl">
           Multiverse{" "}
           <span className="animate-sheen bg-[linear-gradient(90deg,#4ADE80,#38BDF8,#4ADE80)] bg-[length:200%_auto] bg-clip-text text-transparent">
             Explorer

@@ -30,7 +30,7 @@ export function Header() {
       <div className="mx-auto flex max-w-7xl items-center px-4 md:px-8 lg:px-12">
         <Link
           href="/"
-          className="rounded-md font-display text-lg font-bold text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-portal-500"
+          className="rounded-md font-logo text-lg tracking-wide text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-portal-500"
         >
           Multiverse{" "}
           <span className="bg-gradient-to-r from-portal-400 to-rick-blue bg-clip-text text-transparent">

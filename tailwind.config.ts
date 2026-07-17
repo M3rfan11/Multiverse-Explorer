@@ -23,6 +23,7 @@ const config: Config = {
         display: ["var(--font-display)", "sans-serif"],
         sans: ["var(--font-sans)", "sans-serif"],
         mono: ["var(--font-mono)", "monospace"],
+        logo: ["var(--font-logo)", "sans-serif"],
       },
       boxShadow: {
         "glow-sm": "0 0 12px 0 rgb(34 197 94 / 0.15)",

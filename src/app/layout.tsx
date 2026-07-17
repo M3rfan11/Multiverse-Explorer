@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Chakra_Petch, Inter, Space_Mono } from "next/font/google";
+import { Chakra_Petch, Inter, Luckiest_Guy, Space_Mono } from "next/font/google";
 import { AuroraBlobs } from "@/components/layout/aurora-blobs";
 import { CursorCompanion } from "@/components/layout/cursor-companion";
 import { Header } from "@/components/layout/header";
@@ -27,6 +27,14 @@ const spaceMono = Space_Mono({
   display: "swap",
 });
 
+// Wordmark only — a properly licensed font with the show's cartoon energy.
+const luckiestGuy = Luckiest_Guy({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-logo",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "Multiverse Explorer",
   description:
@@ -39,7 +47,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${chakraPetch.variable} ${spaceMono.variable}`}
+      className={`${inter.variable} ${chakraPetch.variable} ${spaceMono.variable} ${luckiestGuy.variable}`}
     >
       <body>
         <div aria-hidden className="fixed inset-0 -z-10 overflow-hidden">
