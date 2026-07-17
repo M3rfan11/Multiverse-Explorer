@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Chakra_Petch, Inter, Space_Mono } from "next/font/google";
 import { Header } from "@/components/layout/header";
+import { Particles } from "@/components/layout/particles";
 import { Providers } from "./providers";
 import "./globals.css";
 
@@ -45,6 +46,7 @@ export default function RootLayout({
           <div className="bg-stars absolute inset-0" />
           <div className="absolute -top-40 left-1/4 size-[480px] animate-aurora rounded-full bg-portal-500/10 blur-3xl" />
           <div className="absolute right-1/5 top-32 size-[420px] animate-aurora-slow rounded-full bg-rick-blue/10 blur-3xl" />
+          <Particles />
         </div>
         <Providers>
           <Header />

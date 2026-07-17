@@ -59,7 +59,7 @@ export function Dashboard() {
       ) : null}
 
       <section className="relative py-12 md:py-16">
-        <PortalRing className="pointer-events-none absolute -right-8 -top-6 hidden size-64 opacity-10 md:block lg:size-72" />
+        <PortalRing className="pointer-events-none absolute -right-12 -top-2 size-44 opacity-10 md:-right-8 md:-top-6 md:size-64 lg:size-72" />
         <p className="font-mono text-xs tracking-[0.35em] text-portal-400">
           CHARACTER DATABASE
         </p>

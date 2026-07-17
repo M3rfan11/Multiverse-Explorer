@@ -53,11 +53,45 @@
   }
 }
 
+/* Floating portal motes (see components/layout/particles.tsx) */
+.particle {
+  position: absolute;
+  top: 0;
+  border-radius: 9999px;
+  opacity: 0;
+  animation-name: float-up;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform, opacity;
+}
+
+@keyframes float-up {
+  0% {
+    transform: translate3d(0, 105vh, 0) scale(1);
+    opacity: 0;
+  }
+  10% {
+    opacity: var(--glow, 0.4);
+  }
+  90% {
+    opacity: var(--glow, 0.4);
+  }
+  100% {
+    transform: translate3d(var(--drift, 20px), -8vh, 0) scale(1.2);
+    opacity: 0;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-aurora,
   .animate-aurora-slow,
   .animate-sheen,
   .animate-pulse-dot {
     animation: none;
+  }
+
+  .particle {
+    animation: none;
+    opacity: 0;
   }
 }

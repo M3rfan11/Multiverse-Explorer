@@ -13,7 +13,11 @@ export function Providers({ children }: { children: React.ReactNode }) {
         defaultOptions: {
           queries: {
             staleTime: 60 * 1000,
-            retry: 1,
+            // Two retries with exponential backoff (1s, 2s) — enough to
+            // ride out flaky mobile connections and transient 429s
+            // without hammering a rate-limited API.
+            retry: 2,
+            retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 4000),
             refetchOnWindowFocus: false,
           },
         },

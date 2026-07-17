@@ -22,7 +22,8 @@ export function CharacterCard({ character }: CharacterCardProps) {
           className="relative overflow-hidden rounded-card border border-white/5 bg-space-900/60 backdrop-blur
             transition-all duration-300
             group-hover:-translate-y-1 group-hover:border-portal-500/40 group-hover:shadow-glow-md
-            group-focus-within:-translate-y-1 group-focus-within:border-portal-500/40"
+            group-focus-within:-translate-y-1 group-focus-within:border-portal-500/40
+            group-active:scale-[0.98] group-active:border-portal-500/40"
         >
           <span
             aria-hidden
