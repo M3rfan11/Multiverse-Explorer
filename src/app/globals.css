@@ -62,6 +62,20 @@
   }
 }
 
+/* The UFO companion replaces the native cursor. The class is added by
+   the component itself, so this only applies when the ship is actually
+   on screen (fine pointer, no reduced-motion). Text fields keep the
+   caret cursor — selecting text blind is a usability disaster. */
+html.cursor-companion,
+html.cursor-companion * {
+  cursor: none;
+}
+
+html.cursor-companion input,
+html.cursor-companion textarea {
+  cursor: text;
+}
+
 /* Floating portal motes (see components/layout/particles.tsx) */
 .particle {
   position: absolute;

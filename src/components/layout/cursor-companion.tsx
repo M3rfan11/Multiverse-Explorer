@@ -23,8 +23,10 @@ export function CursorCompanion() {
 
   const mouseX = useMotionValue(-100);
   const mouseY = useMotionValue(-100);
-  const x = useSpring(mouseX, { stiffness: 110, damping: 15, mass: 0.6 });
-  const y = useSpring(mouseY, { stiffness: 110, damping: 15, mass: 0.6 });
+  // Stiff springs: the ship IS the cursor, so it must track tightly
+  // enough to aim with — just soft enough to feel alive.
+  const x = useSpring(mouseX, { stiffness: 420, damping: 28, mass: 0.5 });
+  const y = useSpring(mouseY, { stiffness: 420, damping: 28, mass: 0.5 });
 
   // Bank into turns: fast horizontal movement tilts the ship.
   const velocityX = useVelocity(x);
@@ -45,13 +47,20 @@ export function CursorCompanion() {
       if (!hasActivated.current) {
         hasActivated.current = true;
         setActive(true);
+        // Hiding the native cursor is gated on this class, so it only
+        // ever applies when the replacement is actually rendering.
+        document.documentElement.classList.add("cursor-companion");
       }
-      mouseX.set(event.clientX + 20);
-      mouseY.set(event.clientY + 16);
+      // Center the ship on the real pointer so aiming stays accurate.
+      mouseX.set(event.clientX - 20);
+      mouseY.set(event.clientY - 15);
     };
 
     window.addEventListener("mousemove", handleMove, { passive: true });
-    return () => window.removeEventListener("mousemove", handleMove);
+    return () => {
+      window.removeEventListener("mousemove", handleMove);
+      document.documentElement.classList.remove("cursor-companion");
+    };
   }, [mouseX, mouseY]);
 
   if (!active) return null;
@@ -62,9 +71,9 @@ export function CursorCompanion() {
       style={{ x, y, rotate }}
       className="pointer-events-none fixed left-0 top-0 z-50"
     >
-      {/* Idle bob, independent of the follow springs */}
+      {/* Subtle idle bob — small, since the ship is now the aim point */}
       <motion.div
-        animate={{ y: [0, -4, 0] }}
+        animate={{ y: [0, -2, 0] }}
         transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
       >
         <svg width="40" height="30" viewBox="0 0 64 48" fill="none">
