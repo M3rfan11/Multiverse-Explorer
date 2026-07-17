@@ -92,7 +92,9 @@ export function InsightsDashboard({
         ))}
       </motion.section>
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      {/* grid-cols-1 is required: without it the implicit track auto-sizes
+          to the widest row content and overflows narrow viewports */}
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <motion.section {...reveal}>
           <Card className="h-full p-5">
             <h2 className="font-display text-lg font-semibold text-white">
@@ -130,7 +132,9 @@ export function InsightsDashboard({
         </Card>
       </motion.section>
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      {/* grid-cols-1 is required: without it the implicit track auto-sizes
+          to the widest row content and overflows narrow viewports */}
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <motion.section {...reveal}>
           <Card className="h-full p-5">
             <h2 className="font-display text-lg font-semibold text-white">
