@@ -12,6 +12,7 @@ import {
   useDashboardFilters,
 } from "@/lib/hooks/use-dashboard-filters";
 import { CharacterGrid, CharacterGridSkeleton } from "./character-grid";
+import { FeaturedSpecimen } from "./featured-specimen";
 import { FilterBar } from "./filter-bar";
 import { Pagination } from "./pagination";
 
@@ -58,25 +59,32 @@ export function Dashboard() {
         </div>
       ) : null}
 
-      <section className="py-12 md:py-16">
-        <h1 className="font-logo text-5xl tracking-wide text-white md:text-6xl">
-          Multiverse <span className="text-portal-400">Explorer</span>
-        </h1>
-        <p className="mt-4 max-w-xl text-slate-400">
-          {totals ? (
-            <>
-              <span className="font-semibold text-portal-300">
-                <CountUp value={totals.info.count} />
-              </span>{" "}
-              beings catalogued across infinite realities
-              {aliveTotals
-                ? `. ${aliveTotals.info.count.toLocaleString()} still alive — for now.`
-                : "."}
-            </>
-          ) : (
-            "Beings catalogued across infinite realities."
-          )}
-        </p>
+      <section className="flex items-start justify-between gap-10 py-12 md:py-16">
+        <div>
+          <h1 className="font-logo text-5xl tracking-wide text-white md:text-6xl">
+            Multiverse <span className="text-portal-400">Explorer</span>
+          </h1>
+          <p className="mt-4 max-w-xl text-slate-400">
+            {totals ? (
+              <>
+                <span className="font-semibold text-portal-300">
+                  <CountUp value={totals.info.count} />
+                </span>{" "}
+                beings catalogued across infinite realities
+                {aliveTotals
+                  ? `. ${aliveTotals.info.count.toLocaleString()} still alive — for now.`
+                  : "."}
+              </>
+            ) : (
+              "Beings catalogued across infinite realities."
+            )}
+          </p>
+        </div>
+        {totals ? (
+          <div className="hidden lg:block">
+            <FeaturedSpecimen totalCount={totals.info.count} />
+          </div>
+        ) : null}
       </section>
 
       <FilterBar

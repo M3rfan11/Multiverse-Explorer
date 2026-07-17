@@ -32,7 +32,8 @@ export function Header() {
           href="/"
           className="rounded-md font-logo text-lg tracking-wide text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-portal-500"
         >
-          Multiverse <span className="text-portal-400">Explorer</span>
+          {/* Quieter than the hero wordmark — one loud logo per screen */}
+          Multiverse Explorer
         </Link>
         <nav className="ml-auto flex items-center gap-5 text-sm">
           <Link

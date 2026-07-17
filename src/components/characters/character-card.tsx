@@ -53,7 +53,7 @@ export function CharacterCard({ character, priority = false }: CharacterCardProp
             <div className="mt-3">
               <StatusBadge status={character.status} />
             </div>
-            <div className="mt-3 flex items-baseline justify-between gap-3 border-t border-white/10 pt-2 font-mono text-[10px] uppercase tracking-wide text-slate-500">
+            <div className="mt-3 flex items-baseline justify-between gap-3 border-t border-white/10 pt-2 font-mono text-[11px] uppercase tracking-wide text-slate-500">
               <span className="shrink-0">{character.episode.length} eps</span>
               <span
                 title={character.location.name}
