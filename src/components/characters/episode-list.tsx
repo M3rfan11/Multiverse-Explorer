@@ -5,10 +5,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { fadeIn, staggerContainer } from "@/lib/motion";
 import type { EpisodeSummary } from "@/types/api";
 
-/**
- * Purely presentational — episodes arrive with the character in one
- * GraphQL query, so this component has no loading or error states.
- */
+// Presentational only — episodes arrive with the character (one GraphQL query).
 export function EpisodeList({ episodes }: { episodes: EpisodeSummary[] }) {
   const reducedMotion = useReducedMotion();
 

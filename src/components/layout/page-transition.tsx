@@ -3,15 +3,9 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { DURATION, EASE } from "@/lib/motion";
 
-/**
- * Entrance animation for route changes, mounted via app/template.tsx
- * (a template remounts on every navigation, unlike a layout).
- *
- * Deliberate trade-off: exit animations are skipped. The App Router
- * unmounts the outgoing page immediately, and the workarounds (freezing
- * router context) are fragile. A clean entrance is worth more than a
- * hacky exit.
- */
+// Route entrance, mounted via app/template.tsx (templates remount per
+// navigation). No exit animations on purpose — the App Router unmounts
+// the old page immediately and the workarounds are fragile. See README.
 export function PageTransition({ children }: { children: React.ReactNode }) {
   const reducedMotion = useReducedMotion();
 

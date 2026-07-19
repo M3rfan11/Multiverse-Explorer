@@ -3,7 +3,6 @@ import type { HTMLAttributes } from "react";
 
 type CardProps = HTMLAttributes<HTMLDivElement>;
 
-/** Glassmorphism surface used across the app. */
 export function Card({ className, ...props }: CardProps) {
   return (
     <div

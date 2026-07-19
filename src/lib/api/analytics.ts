@@ -3,17 +3,10 @@ import { unstable_cache } from "next/cache";
 import type { AnalyticsResponse } from "@/types/analytics";
 import { graphqlClient, toStatus } from "./graphql";
 
-/**
- * Server-only analytics service.
- *
- * The dataset spans ~52 REST pages, and bursts of that size trip the
- * API's Cloudflare rate limit — especially from shared serverless egress
- * IPs. GraphQL aliases collapse the problem: every page of a resource is
- * requested in ONE query (`p1: characters(page: 1) {...} p2: ...`), so
- * the whole aggregation costs 4 HTTP requests, each asking for exactly
- * the fields the analytics need. The computed result is then cached for
- * an hour, so the work runs at most once per revalidation window.
- */
+// Server-only analytics. The dataset is ~52 REST pages and bursts that
+// size get 429'd by the API's Cloudflare (worst from shared serverless
+// IPs). GraphQL aliases collapse each resource's pages into one query,
+// so the whole aggregation is 4 requests, cached for an hour below.
 
 const REVALIDATE_SECONDS = 3600;
 const RETRY_AFTER_429_MS = 2500;

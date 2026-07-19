@@ -10,10 +10,7 @@ interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
   options: SelectOption[];
 }
 
-/**
- * Styled native select — keeps keyboard/screen-reader behavior for free,
- * custom chevron because the native one can't be themed.
- */
+// native select (free a11y), custom chevron since the native one can't be themed
 export function Select({ options, className, ...props }: SelectProps) {
   return (
     <div className={cn("relative", className)}>

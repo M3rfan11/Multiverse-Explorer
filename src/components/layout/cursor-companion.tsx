@@ -10,12 +10,9 @@ import {
 import { useEffect, useRef, useState } from "react";
 
 /**
- * A tiny UFO that trails the cursor (original artwork — Rick's ship,
- * not a copyrighted sprite). It follows on soft springs so it lags and
- * catches up, banks into turns based on horizontal velocity, and bobs
- * gently while idle. The native cursor stays untouched (hiding it is an
- * accessibility foot-gun). Desktop pointers only; disabled for
- * prefers-reduced-motion.
+ * UFO cursor. Original SVG (not show art). Fine pointers only,
+ * disabled under prefers-reduced-motion — see globals.css for the
+ * cursor:none gating.
  */
 export function CursorCompanion() {
   const [active, setActive] = useState(false);
@@ -23,12 +20,10 @@ export function CursorCompanion() {
 
   const mouseX = useMotionValue(-100);
   const mouseY = useMotionValue(-100);
-  // Stiff springs: the ship IS the cursor, so it must track tightly
-  // enough to aim with — just soft enough to feel alive.
+  // stiff enough to aim with, since this replaces the real cursor
   const x = useSpring(mouseX, { stiffness: 420, damping: 28, mass: 0.5 });
   const y = useSpring(mouseY, { stiffness: 420, damping: 28, mass: 0.5 });
 
-  // Bank into turns: fast horizontal movement tilts the ship.
   const velocityX = useVelocity(x);
   const rotate = useTransform(velocityX, [-1500, 1500], [-16, 16], {
     clamp: true,

@@ -4,11 +4,8 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useMemo } from "react";
 import type { CharacterFilters, CharacterStatus } from "@/types/api";
 
-/**
- * The URL is the single source of truth for dashboard state.
- * `?name=rick&status=alive&page=2` is shareable, survives refresh,
- * and works with the back button. Components never hold filter state.
- */
+// The URL is the single source of truth for dashboard state — shareable,
+// survives refresh, works with the back button.
 
 export const SPECIES_OPTIONS = [
   "Human",
@@ -76,8 +73,7 @@ export function useDashboardFilters() {
       const query = params.toString();
       const url = query ? `${pathname}?${query}` : pathname;
 
-      // replace: typing/filtering shouldn't spam history.
-      // push: page changes are deliberate steps the back button should undo.
+      // replace for typing (no history spam), push for page changes
       if (mode === "push") {
         router.push(url, { scroll: false });
       } else {
@@ -89,7 +85,7 @@ export function useDashboardFilters() {
 
   const setFilters = useCallback(
     (update: Partial<Omit<DashboardFilters, "page">>) => {
-      // Any filter change resets to page 1 — page 7 of a new search doesn't exist.
+      // filter changes reset to page 1
       navigate({ ...filters, ...update, page: 1 }, "replace");
     },
     [filters, navigate],

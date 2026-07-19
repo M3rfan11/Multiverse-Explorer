@@ -6,12 +6,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { useCharacterWithEpisodes } from "@/lib/hooks/use-character-with-episodes";
 
-/**
- * Daily featured character for the hero's right side. The pick is
- * deterministic per day (no randomness — same for every visitor, and no
- * hydration mismatch). Fetching via the detail-page query means clicking
- * through lands on an already-cached character.
- */
+// Daily pick, deterministic (same for everyone, no hydration mismatch).
+// Uses the detail-page query so clicking through hits a warm cache.
 const DAY = Math.floor(Date.now() / 86_400_000);
 
 export function FeaturedSpecimen({ totalCount }: { totalCount: number }) {

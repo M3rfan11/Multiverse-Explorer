@@ -7,10 +7,7 @@ interface StatusBadgeProps {
   size?: "sm" | "md";
 }
 
-/**
- * Colored status pill. The dot pulses only for living characters —
- * a small "heartbeat" detail.
- */
+// dot pulses for living characters only
 export function StatusBadge({ status, size = "sm" }: StatusBadgeProps) {
   return (
     <span

@@ -11,10 +11,7 @@ const GRID_CLASSES =
 
 interface CharacterGridProps {
   characters: Character[];
-  /**
-   * Changes when filters (not page) change, remounting the list so the
-   * stagger entrance replays for a new result set but not on pagination.
-   */
+  /** Changes on filter (not page) change so the stagger replays for new result sets. */
   filterKey: string;
 }
 

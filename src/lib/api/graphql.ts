@@ -6,12 +6,8 @@ import type {
 } from "@/types/api";
 import { ApiError } from "./client";
 
-/**
- * GraphQL is used only where it earns its keep: the detail page needs a
- * character AND its episodes, which REST takes two round-trips to answer.
- * One query, exactly the fields we render, nothing more.
- * The dashboard stays on REST — its pagination/filter API maps 1:1 already.
- */
+// GraphQL for the detail page only: character + episodes in one query
+// where REST needs two round-trips. Dashboard stays on REST (see README).
 
 export const graphqlClient = new GraphQLClient(
   "https://rickandmortyapi.com/graphql",

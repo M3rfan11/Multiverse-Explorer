@@ -1,10 +1,6 @@
 import type { Variants } from "framer-motion";
 
-/**
- * Central motion vocabulary. Components import from here and never
- * hand-roll durations/easings, so the whole app moves consistently.
- * Everything animates transform/opacity only (compositor-friendly).
- */
+// Shared variants/timings. Transform/opacity only.
 
 export const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
